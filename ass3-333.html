@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Data Table</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Statistics of Students by Nationalities</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Semester</th>
+                    <th>Programs</th>
+                    <th>Nationality</th>
+                    <th>College</th>
+                    <th>Number of Students</th>
+                </tr>
+            </thead>
+            <tbody id="data-table">
+                <!-- Data will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </main>
+    <script>
+        async function fetchData() {
+            try {
+                const link = "https://data.gov.bh/api/explore/v2.1/catalog/datasets/01-statistics-of-students-nationalities_updated/records?limit=20";
+                const response = await fetch(link);
+                const data = await response.json();
+                printResults(data.results);
+            }
+            catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        function printResults(results) {
+            const tableBody = document.getElementById('data-table');
+            // Populating the table dynamically
+            results.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${result.year}</td>
+                <td>${result.semester}</td>
+                <td>${result.the_programs}</td>
+                <td>${result.nationality}</td>
+                <td>${result.colleges}</td>
+                <td>${result.number_of_students}</td>
+            `;
+
+                tableBody.appendChild(row);
+            });
+        }
+        // Fetch data on page load
+        fetchData();
+    </script>
+</body>
+
+</html>
